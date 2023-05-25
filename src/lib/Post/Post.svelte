@@ -46,7 +46,6 @@
   const firstN = 5;
   $: firstNLikes = li.slice(0, firstN);
   $: restLikes = li.slice(firstN);
-  console.log(likes, firstNLikes, restLikes);
   let comment = "";
   const timeAgo = dayjs(date).fromNow();
   let timeout = 0;
@@ -231,7 +230,7 @@
         <img
           referrerpolicy="no-referrer"
           class="w-6 rounded-full"
-          src={c.user.image}
+          src={c.user?.image}
           alt={c.user?.name}
           title={c.user?.name}
         />:
