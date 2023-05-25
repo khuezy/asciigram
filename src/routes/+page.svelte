@@ -7,8 +7,8 @@
 </script>
 
 <svelte:head>
-  <title>graduagram</title>
-  <meta name="description" content="Graduagram" />
+  <title>asciigram</title>
+  <meta name="description" content="AsciiGram" />
 </svelte:head>
 
 <section>

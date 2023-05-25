@@ -43,9 +43,13 @@
   $: com = comments;
   $: li = likes;
   $: like = !!li.find((l) => l.user?.id === $page.data.session?.user.id);
-
+  const firstN = 5;
+  $: firstNLikes = li.slice(0, firstN);
+  $: restLikes = li.slice(firstN);
+  console.log(likes, firstNLikes, restLikes);
   let comment = "";
   const timeAgo = dayjs(date).fromNow();
+  let timeout = 0;
 
   function toHtml(code: string) {
     // Extract the code value from the input string
@@ -105,6 +109,17 @@
     }
     like = !like;
   }
+
+  function doubleClick() {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = 0;
+      postLike();
+    }
+    timeout = setTimeout(() => {
+      timeout = 0;
+    }, 500);
+  }
 </script>
 
 <div
@@ -124,6 +139,7 @@
 
   <!-- <img class="w-full my-2" {src} alt="insta" /> -->
   <pre
+    on:click={doubleClick}
     class="text-[7px] sm:text-[12px] mt-4 sm:text-sm border-0 shadow-none leading-tight"
     style={"background: #000"}>
 {#each images as image}{@html stringToHtml(image.data)}{/each}
@@ -133,18 +149,20 @@
     <span>Liked by </span>
     {#if li.length === 0}
       <span>0</span>
-    {:else if li.length > 0}
+    {/if}
+    {#each firstNLikes as l}
       <span>
         <img
           referrerpolicy="no-referrer"
           class="w-6 rounded-full flex-grow-[2]"
-          src={li[0].user?.image}
-          alt={li[0].user?.name}
-        /></span
-      >
-    {/if}
-    {#if li.length > 1}
-      <span>and {li.length - 1} others</span>
+          src={l.user?.image}
+          alt={l.user?.name}
+          title={l.user?.name}
+        />
+      </span>
+    {/each}
+    {#if restLikes.length}
+      <span>and {restLikes.length} other{restLikes.length > 1 ? "s" : ""}</span>
     {/if}
   </div>
   {#if $page.data.session?.user}
@@ -189,6 +207,7 @@
         class="w-6 rounded-full flex-grow-[2]"
         src={$page.data.session?.user.image}
         alt={$page.data.session?.user.name}
+        title={$page.data.session?.user.name}
       />:
 
       <input
@@ -214,6 +233,7 @@
           class="w-6 rounded-full"
           src={c.user.image}
           alt={c.user?.name}
+          title={c.user?.name}
         />:
         <!-- <span>{c.user?.name.split(" ")[0]}:</span> -->
         <span class="ml-1">{c.comment}</span>
