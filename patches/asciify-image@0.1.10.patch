@@ -1,0 +1,29 @@
+diff --git a/index.js b/index.js
+index 3cb78a73c9f56d5936225453d3151b912afe9500..e24255c4c3932ad2c1afc20d2ba6af07b894163d 100644
+--- a/index.js
++++ b/index.js
+@@ -95,18 +95,18 @@ var asciify_core = function(path, opts, callback) {
+         for (c = 0; c < options.c_ratio; c++) {   // character ratio
+ 
+           var next = chars.charAt(Math.round(intensity(image, i, j) / norm));
+-
++          var clr
+           // Color character using
+           if (options.color) {
+-            var clr = Jimp.intToRGBA(image.getPixelColor(i, j));
++            clr = Jimp.intToRGBA(image.getPixelColor(i, j));
+             next = Couleurs.fg(next, clr.r, clr.g, clr.b);
+           }
+ 
+-          if (options.as_string)
++          if (options.as_string) {
+             ascii += next;
+-
+-          else
+-            ascii[j].push(next);
++	  } else {
++            ascii[j].push(`rgb(${clr.r},${clr.g},${clr.b})|${chars.charAt(Math.round(intensity(image, i, j) / norm))}`);
++          }
+         }
+       }
+ 
