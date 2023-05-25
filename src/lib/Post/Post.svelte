@@ -85,6 +85,7 @@
     });
     const data = await result.json();
     com = com.concat(data.comment);
+    comment = "";
   }
 
   async function postLike() {
