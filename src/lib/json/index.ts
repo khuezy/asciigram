@@ -1,5 +1,6 @@
 export async function parseJson(reader: ReadableStreamDefaultReader<Uint8Array>) {
   let result: string[] = []
+  // # ATTN
   while (true) {
     const r = await reader?.read()
     if (r?.done) break

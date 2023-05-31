@@ -8,7 +8,7 @@ import { posts, postsRelations } from './models/posts';
 import { comments, commentsRelations } from './models/comments';
 import { users, usersRelations } from './models/users';
 import { likes, likesRelations } from './models/likes';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
  
 const connectionString  = `${DB_URL || process.env.DB_URL}?sslmode=require`
 const client = postgres(connectionString);
@@ -54,6 +54,7 @@ export async function getPosts() {
 
 export async function saveImage(authorId: string, author: string, avatar: string, data: string) {
   return db.transaction<boolean>(async tx => {
+    tx.select().from(users).for('update')
     const post = await tx.insert(posts).values({authorId, author, avatar}).returning()
     await tx.insert(images).values({data, postId: post[0].id})
     return true

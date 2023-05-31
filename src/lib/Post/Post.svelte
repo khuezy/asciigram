@@ -110,6 +110,7 @@
   }
 
   function doubleClick() {
+    // # ATTN
     if (timeout) {
       clearTimeout(timeout);
       timeout = 0;

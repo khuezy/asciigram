@@ -13,7 +13,7 @@ export const posts = pgTable('posts', {
   authorId: varchar('author_id').notNull(),
   avatar:  varchar('posts').notNull(),
   time: timestamp('time').defaultNow(),
-  text: text('text')
+  text: text('text'),
 }, (table) => ({
   authorIdx: index('author_idx').on(table.author)
 }))

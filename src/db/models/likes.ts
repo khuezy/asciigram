@@ -9,6 +9,7 @@ export const likes = pgTable('likes', {
   id: serial('id').primaryKey(),
   postId: integer('post_id').notNull(),
   userId: uuid('user_id').notNull(),
+  
 }, (table) => ({
   postIdx: index('post_idx').on(table.postId),
   userIdx: index('user_idx').on(table.userId)
