@@ -1,4 +1,5 @@
-import { and, eq } from 'drizzle-orm'
+import { and, eq, sql } from 'drizzle-orm'
+
 import type { Adapter } from "next-auth/adapters"
 import { users } from './models/users'
 import { accounts } from './models/accounts'
@@ -68,15 +69,16 @@ export function DrizzleAdapterMySQL(): Adapter {
       }
     },
     getUserByAccount: async (account) => {
-      const user = await db.select()
-        .from(users)
-        .innerJoin(accounts, (
+      const results = await db.select()
+        .from(accounts)
+        .where(
           and(
             eq(accounts.providerAccountId, account.providerAccountId),
             eq(accounts.provider, account.provider)
           )
-        ))
-      return user[0]?.users
+        )
+        .leftJoin(users, sql`${accounts.userId}::uuid = ${users.id}`)
+      return results[0]?.users
     },
     deleteSession: async (sessionToken) => {
       return {} as any

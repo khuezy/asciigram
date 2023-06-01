@@ -8,7 +8,14 @@ export const handle = SvelteKitAuth({
   session: {
     strategy: 'jwt',
   },
-  providers: [Google({ clientId: GOOGLE_ID, clientSecret: GOOGLE_SECRET })],
+  providers: [Google({ 
+    clientId: GOOGLE_ID, clientSecret: GOOGLE_SECRET ,
+     authorization: {
+        params: {
+          prompt: 'select_account'
+        }
+      }
+  })],
   callbacks: {
     session: async ({ session, token }) => {
       // Adds the user id and role to the session object

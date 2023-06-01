@@ -54,7 +54,6 @@ export async function getPosts() {
 
 export async function saveImage(authorId: string, author: string, avatar: string, data: string) {
   return db.transaction<boolean>(async tx => {
-    tx.select().from(users).for('update')
     const post = await tx.insert(posts).values({authorId, author, avatar}).returning()
     await tx.insert(images).values({data, postId: post[0].id})
     return true
